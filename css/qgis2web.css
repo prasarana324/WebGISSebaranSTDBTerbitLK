@@ -367,16 +367,6 @@
 
     padding: 20px;
 }
-@media (max-width: 768px) {
-
-    #dashboard-panel {
-        width: 90% !important;
-        left: 5% !important;
-        height: 120px !important;
-        padding: 10px !important;
-    }
-
-}
 
     #dashboard-panel .dashboard-title {
         font-size: 9px !important;
