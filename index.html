@@ -332,7 +332,8 @@
         </div>
 
         <div class="header-subtitle">
-            DINAS TANAMAN PANGAN, HORTIKULTURA DAN PERKEBUNAN KABUPATEN LIMA PULUH KOTA
+            DINAS TANAMAN PANGAN, HORTIKULTURA DAN PERKEBUNAN 
+	    KABUPATEN LIMA PULUH KOTA
         </div>
     </div>
 </header>
@@ -1438,7 +1439,6 @@ if (clearKecamatan) {
     );
 
 }
-
 </script>
 <script>
 
@@ -1675,8 +1675,49 @@ if (clearNagari) {
     );
 
 }
-
 </script>
+
+    // Reset Kecamatan
+    var kecamatan = document.getElementById("filter-kecamatan");
+    if (kecamatan) {
+        kecamatan.value = "ALL";
+    }
+
+    // Reset Nagari
+    var nagari = document.getElementById("filter-nagari");
+    if (nagari) {
+        nagari.value = "ALL";
+    }
+
+    // Tampilkan SEMUA fitur
+    layer_KebunSawitRakyatBersertifikat_5.eachLayer(function(featureLayer) {
+
+        if (featureLayer.feature) {
+            map.addLayer(featureLayer);
+        }
+
+    });
+
+    // Update dashboard
+    if (typeof updateDashboard === "function") {
+        updateDashboard();
+    }
+
+    console.log("SEMUA FILTER SUDAH DIBERSIHKAN");
+
+});
+
+    /* Update dashboard */
+    if (typeof updateDashboard === "function") {
+
+        updateDashboard();
+
+    }
+
+};
+document.getElementById("clear-filter").onclick = function() {
+    alert("TOMBOL BERSIHKAN FILTER BERFUNGSI");
+};
 <script>
 
 var filterToggle =
