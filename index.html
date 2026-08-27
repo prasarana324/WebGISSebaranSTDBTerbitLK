@@ -1424,16 +1424,20 @@ filterKecamatan.addEventListener(
 
 /* Tombol Bersihkan */
 
-clearKecamatan.addEventListener(
-    "click",
-    function() {
+if (clearKecamatan) {
 
-        filterKecamatan.value = "ALL";
+    clearKecamatan.addEventListener(
+        "click",
+        function() {
 
-        filterKecamatanMap();
+            filterKecamatan.value = "ALL";
 
-    }
-);
+            filterKecamatanMap();
+
+        }
+    );
+
+}
 
 </script>
 <script>
@@ -1657,16 +1661,20 @@ function filterNagari() {
  * Tombol bersihkan
  */
 
-clearNagari.addEventListener(
-    "click",
-    function() {
+if (clearNagari) {
 
-        selectNagari.value = "ALL";
+    clearNagari.addEventListener(
+        "click",
+        function() {
 
-        filterNagari();
+            selectNagari.value = "ALL";
 
-    }
-);
+            filterNagari();
+
+        }
+    );
+
+}
 
 </script>
 <script>
@@ -1707,7 +1715,60 @@ filterClose.onclick = function() {
     filterPanel.style.display = "none";
 
 };
+var clearFilter =
+    document.getElementById("clear-filter");
 
+if (clearFilter) {
+
+    clearFilter.addEventListener(
+        "click",
+        function() {
+
+            /* Reset Kecamatan */
+            var kecamatan =
+                document.getElementById("filter-kecamatan");
+
+            if (kecamatan) {
+                kecamatan.value = "ALL";
+            }
+
+
+            /* Reset Nagari */
+            var nagari =
+                document.getElementById("filter-nagari");
+
+            if (nagari) {
+                nagari.value = "ALL";
+            }
+
+
+            /* Tampilkan kembali semua data */
+            layer_KebunSawitRakyatBersertifikat_5.eachLayer(
+                function(featureLayer) {
+
+                    if (featureLayer.feature) {
+
+                        map.addLayer(featureLayer);
+
+                    }
+
+                }
+            );
+
+
+            /* Update dashboard */
+            if (
+                typeof updateDashboard === "function"
+            ) {
+
+                updateDashboard();
+
+            }
+
+        }
+    );
+
+}
 </script>
 </body>
 </html>
