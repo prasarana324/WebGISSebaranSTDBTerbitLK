@@ -293,28 +293,27 @@
    TAMPILAN HP
    ===================================== */
 
-@media (max-width: 768px) {
+@media screen and (max-width: 600px) {
 
-    #dashboard-panel {
-        width: 180px !important;
-        padding: 8px !important;
-        font-size: 10px !important;
+    #filter-container {
+        top: 130px;
+        right: 10px;
     }
 
-    #dashboard-panel .dashboard-title {
-        font-size: 11px !important;
+    #filter-toggle {
+        width: 34px;
+        height: 34px;
+
+        font-size: 16px;
     }
 
-    #dashboard-panel .dashboard-number {
-        font-size: 18px !important;
-    }
+    #filter-panel {
 
-    #dashboard-panel .dashboard-label {
-        font-size: 9px !important;
-    }
+        width: 175px;
 
-    #dashboard-panel .dashboard-content {
-        gap: 5px !important;
+        top: 40px;
+
+        padding: 9px;
     }
 
 }
@@ -983,6 +982,7 @@ function toggleDashboard() {
     }
 
 }
+
 </script>
 <script>
 
