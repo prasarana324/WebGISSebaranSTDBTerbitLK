@@ -368,6 +368,9 @@
     padding: 20px;
 }
 
+#dashboard-panel.dashboard-open {
+    display: block !important;
+}
 
 /* DASHBOARD TERBUKA */
 
