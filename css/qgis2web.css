@@ -368,6 +368,7 @@
     padding: 20px;
 }
 
+
 /* DASHBOARD TERBUKA */
 
 #dashboard-panel.dashboard-open {
@@ -488,7 +489,7 @@
 
     #dashboard-toggle {
 
-        top: 62px;
+        top: 66px;
 
         left: 50%;
 
@@ -514,4 +515,20 @@
         z-index: 10001;
     }
 
+}
+/* Mengecilkan tombol Legenda */
+.leaflet-control-layers {
+    transform: scale(0.75);
+    transform-origin: top right;
+}
+@media (max-width: 768px) {
+    .leaflet-control {
+        font-size: 11px !important;
+    }
+
+    .leaflet-control-layers-toggle {
+        width: 28px !important;
+        height: 28px !important;
+        background-size: 18px 18px !important;
+    }
 }
