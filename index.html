@@ -1,0 +1,1713 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/L.Control.Layers.Tree.css">
+        <link rel="stylesheet" href="css/L.Control.Locate.min.css">
+        <link rel="stylesheet" href="css/qgis2web.css">
+        <link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-search.css">
+        <link rel="stylesheet" href="css/leaflet.photon.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+/* =========================================
+   FILTER KECAMATAN
+   ========================================= */
+
+#kecamatan-filter {
+
+    position: fixed;
+
+    top: 90px;
+    right: 15px;
+
+    z-index: 9999;
+
+    width: 210px;
+
+    background: white;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+
+    font-family: Arial, sans-serif;
+
+}
+
+#kecamatan-filter label {
+
+    display: block;
+
+    font-weight: bold;
+
+    font-size: 13px;
+
+    margin-bottom: 6px;
+
+}
+
+#filter-kecamatan {
+
+    width: 100%;
+
+    padding: 7px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 5px;
+
+    background: white;
+
+}
+
+#clear-kecamatan {
+
+    width: 100%;
+
+    margin-top: 7px;
+
+    padding: 6px;
+
+    border: none;
+
+    border-radius: 5px;
+
+    cursor: pointer;
+
+    background: #eeeeee;
+
+}        
+/* =========================================
+   FILTER NAGARI
+   ========================================= */
+
+#nagari-filter {
+
+    position: fixed;
+
+    top: 90px;
+
+    right: 240px;
+
+    z-index: 9999;
+
+    width: 210px;
+
+    background: white;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+
+    font-family: Arial, sans-serif;
+}
+
+#nagari-filter label {
+
+    display: block;
+
+    font-weight: bold;
+
+    font-size: 13px;
+
+    margin-bottom: 6px;
+}
+
+#filter-nagari {
+
+    width: 100%;
+
+    padding: 7px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 5px;
+
+    background: white;
+}
+
+#clear-nagari {
+
+    width: 100%;
+
+    margin-top: 7px;
+
+    padding: 6px;
+
+    border: none;
+
+    border-radius: 5px;
+
+    cursor: pointer;
+
+    background: #eeeeee;
+}
+/* =====================================
+   TOMBOL FILTER
+   ===================================== */
+
+#filter-container {
+    position: fixed;
+    top: 180px;
+    right: 20px;
+    z-index: 9998;
+}
+
+
+/* Tombol kecil hanya berupa simbol */
+
+#filter-toggle {
+    width: 38px;
+    height: 38px;
+
+    border: 1px solid #aaa;
+    border-radius: 6px;
+
+    background: white;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+    box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+}
+
+
+/* Panel filter tersembunyi */
+
+#filter-panel {
+    display: none;
+
+    position: absolute;
+
+    top: 45px;
+    right: 0;
+
+    width: 190px;
+
+    background: white;
+
+    padding: 10px;
+
+    border-radius: 7px;
+
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+}
+
+
+/* Judul */
+
+#filter-title {
+    font-weight: bold;
+    font-size: 14px;
+
+    margin-bottom: 10px;
+
+    border-bottom: 1px solid #ddd;
+
+    padding-bottom: 6px;
+}
+
+
+/* Tombol X */
+
+#filter-close {
+    float: right;
+
+    font-size: 18px;
+
+    cursor: pointer;
+}
+
+
+/* Label */
+
+#filter-panel label {
+    display: block;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    margin-top: 8px;
+
+    margin-bottom: 4px;
+}
+
+
+/* Dropdown */
+
+#filter-panel select {
+
+    width: 100%;
+
+    height: 30px;
+
+    font-size: 12px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 4px;
+
+    background: white;
+}
+
+
+/* Tombol bersihkan */
+
+#clear-filter {
+
+    width: 100%;
+
+    margin-top: 10px;
+
+    height: 28px;
+
+    border: none;
+
+    border-radius: 4px;
+
+    cursor: pointer;
+
+    font-size: 11px;
+}
+
+
+/* =====================================
+   TAMPILAN HP
+   ===================================== */
+
+@media screen and (max-width: 600px) {
+
+    #filter-container {
+        top: 130px;
+        right: 10px;
+    }
+
+    #filter-toggle {
+        width: 34px;
+        height: 34px;
+
+        font-size: 16px;
+    }
+
+    #filter-panel {
+
+        width: 175px;
+
+        top: 40px;
+
+        padding: 9px;
+    }
+
+}
+</style>
+        <title>WEBGIS SEBARAN KEBUN SAWIT RAKYAT BERSERTIFIKAT</title>
+    </head>
+    <body>
+<header id="webgis-header">
+    <div class="header-logo">
+        <img src="images/logo.png" alt="Logo">
+    </div>
+
+    <div class="header-text">
+        <div class="header-title">
+            WEBGIS SEBARAN E-STDB TERBIT
+        </div>
+
+        <div class="header-subtitle">
+            DINAS TANAMAN PANGAN, HORTIKULTURA DAN PERKEBUNAN KABUPATEN LIMA PULUH KOTA
+        </div>
+    </div>
+</header>
+<!-- DASHBOARD -->
+<div id="dashboard-panel">
+
+    <div class="dashboard-title">
+        DASHBOARD E-STDB TERBIT
+    </div>
+
+    <div class="dashboard-content">
+
+        <div class="dashboard-item">
+            <div class="dashboard-number" id="total-data">0</div>
+            <div class="dashboard-label">TOTAL DATA TERBIT</div>
+        </div>
+
+        <div class="dashboard-item">
+            <div class="dashboard-number" id="total-harau">0</div>
+            <div class="dashboard-label">
+                HARAU
+            </div>
+        </div>
+
+        <div class="dashboard-item">
+            <div class="dashboard-number" id="total-kapurix">0</div>
+            <div class="dashboard-label">
+                KAPUR IX
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- TOMBOL PANAH -->
+<button id="dashboard-toggle"
+        onclick="toggleDashboard()">
+    ▼
+</button>
+<div id="filter-container">
+
+    <button id="filter-toggle" title="Filter">
+        ⚱
+    </button>
+
+    <div id="filter-panel">
+
+        <div id="filter-title">
+            FILTER
+            <span id="filter-close">×</span>
+        </div>
+
+        <label>KECAMATAN</label>
+
+        <select id="filter-kecamatan">
+            <option value="ALL">Semua Kecamatan</option>
+            <option value="HARAU">Harau</option>
+            <option value="KAPUR IX">Kapur IX</option>
+        </select>
+
+
+        <label>NAGARI</label>
+
+        <select id="filter-nagari">
+            <option value="ALL">Semua Nagari</option>
+        </select>
+
+
+        <button id="clear-filter">
+            Bersihkan Filter
+        </button>
+
+    </div>
+
+</div>     
+<div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/L.Control.Layers.Tree.min.js"></script>
+        <script src="js/L.Control.Locate.min.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet.photon.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/leaflet-search.js"></script>
+        <script src="data/BATASKECAMATAN_2.js"></script>
+        <script src="data/ADM_HARAU_3.js"></script>
+        <script src="data/ADM_KAPURIX_4.js"></script>
+        <script src="data/KebunSawitRakyatBersertifikat_5.js"></script>
+        <script>
+        var highlightLayer;
+        function highlightFeature(e) {
+            highlightLayer = e.target;
+
+            if (e.target.feature.geometry.type === 'LineString' || e.target.feature.geometry.type === 'MultiLineString') {
+              highlightLayer.setStyle({
+                color: 'rgba(255, 255, 255, 1.00)',
+              });
+            } else {
+              highlightLayer.setStyle({
+                fillColor: 'rgba(255, 255, 255, 1.00)',
+                fillOpacity: 1
+              });
+            }
+            highlightLayer.openPopup();
+        }
+        var map = L.map('map', {
+            zoomControl:false, maxZoom:28, minZoom:1
+        })
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/qgis2web/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        // remove popup's row if "visible-with-data"
+        function removeEmptyRowsFromPopupContent(content, feature) {
+         var tempDiv = document.createElement('div');
+         tempDiv.innerHTML = content;
+         var rows = tempDiv.querySelectorAll('tr');
+         for (var i = 0; i < rows.length; i++) {
+             var td = rows[i].querySelector('td.visible-with-data');
+             var key = td ? td.id : '';
+             if (td && td.classList.contains('visible-with-data') && feature.properties[key] == null) {
+                 rows[i].parentNode.removeChild(rows[i]);
+             }
+         }
+         return tempDiv.innerHTML;
+        }
+        // modify popup if contains media
+        function addClassToPopupIfMedia(content, popup) {
+            var tempDiv = document.createElement('div');
+            tempDiv.innerHTML = content;
+            var imgTd = tempDiv.querySelector('td img');
+            if (imgTd) {
+                var src = imgTd.getAttribute('src');
+                if (/\.(jpg|jpeg|png|gif|bmp|webp|avif)$/i.test(src)) {
+                    popup._contentNode.classList.add('media');
+                    var img = popup._contentNode.querySelector('td img');
+                    if (img) {
+                        // If already loaded (cache), update immediately
+                        if (img.complete && img.naturalHeight > 0) {
+                            popup.update();
+                        } else {
+                            img.addEventListener('load', function() {
+                                popup.update();
+                            });
+                            img.addEventListener('error', function() {
+                                popup.update();
+                            });
+                        }
+                    }
+                } else if (/\.(mp3|wav|ogg|aac)$/i.test(src)) {
+                    var audio = document.createElement('audio');
+                    audio.controls = true;
+                    audio.src = src;
+                    imgTd.parentNode.replaceChild(audio, imgTd);
+                    popup._contentNode.classList.add('media');
+                    setTimeout(function() {
+                        popup.setContent(tempDiv.innerHTML);
+                        popup.update();
+                    }, 10);
+                } else if (/\.(mp4|webm|ogg|mov)$/i.test(src)) {
+                    var video = document.createElement('video');
+                    video.controls = true;
+                    video.src = src;
+                    video.style.width = "400px";
+                    video.style.height = "300px";
+                    video.style.maxHeight = "60vh";
+                    video.style.maxWidth = "60vw";
+                    imgTd.parentNode.replaceChild(video, imgTd);
+                    popup._contentNode.classList.add('media');
+                    // Aggiorna il popup quando il video carica i metadati
+                    video.addEventListener('loadedmetadata', function() {
+                        popup.update();
+                    });
+                    setTimeout(function() {
+                        popup.setContent(tempDiv.innerHTML);
+                        popup.update();
+                    }, 10);
+                } else {
+                    popup._contentNode.classList.remove('media');
+                }
+            } else {
+                popup._contentNode.classList.remove('media');
+            }
+        }
+        var abstract = new L.Control({'position':'bottomright'});
+        abstract.onAdd = function (map) {
+            this._div = L.DomUtil.create('div',
+            'leaflet-control abstract');
+            this._div.id = 'abstract'
+                this._div.setAttribute("onmouseenter", "abstract.show()");
+                this._div.setAttribute("onmouseleave", "abstract.hide()");
+                this.hide();
+                return this._div;
+            };
+            abstract.hide = function () {
+                this._div.classList.remove("abstractUncollapsed");
+                this._div.classList.add("abstract");
+                this._div.innerHTML = 'i'
+            }
+            abstract.show = function () {
+                this._div.classList.remove("abstract");
+                this._div.classList.add("abstractUncollapsed");
+                this._div.innerHTML = 'Peta Sebaran Perkebunan Sawit Rakyat Bersertifikat ini merupakan WebGIS yang menyajikan informasi spasial mengenai sebaran area kebun sawit rakyat yang telah tersertifikasi dan terdaftar di E-STDB (Surat Tanda Daftar Budidaya) di Kabupaten Lima Puluh Kota. WebGIS ini bertujuan untuk mendukung penyajian informasi, monitoring, dan pengambilan keputusan terkait program-program pertanian lainnya';
+        };
+        abstract.addTo(map);
+        var zoomControl = L.control.zoom({
+            position: 'topleft'
+        }).addTo(map);
+        L.control.locate({locateOptions: {maxZoom: 19}}).addTo(map);
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0].innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0].className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
+        }
+        map.createPane('pane_EsriTerrain_0');
+        map.getPane('pane_EsriTerrain_0').style.zIndex = 400;
+        var layer_EsriTerrain_0 = L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}', {
+            pane: 'pane_EsriTerrain_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+        });
+        layer_EsriTerrain_0;
+        map.addLayer(layer_EsriTerrain_0);
+        map.createPane('pane_EsriImagery_1');
+        map.getPane('pane_EsriImagery_1').style.zIndex = 401;
+        var layer_EsriImagery_1 = L.tileLayer('https://server.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            pane: 'pane_EsriImagery_1',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+        });
+        layer_EsriImagery_1;
+        map.addLayer(layer_EsriImagery_1);
+        function pop_BATASKECAMATAN_2(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (var i in e.target._eventParents) {
+                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
+                            e.target._eventParents[i].resetStyle(e.target);
+                        }
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">KABUPATEN</th>\
+                        <td>' + (feature.properties['KABUPATEN'] !== null ? autolinker.link(String(feature.properties['KABUPATEN']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">KECAMATAN</th>\
+                        <td>' + (feature.properties['KECAMATAN'] !== null ? autolinker.link(String(feature.properties['KECAMATAN']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Luas_Ha</th>\
+                        <td>' + (feature.properties['Luas_Ha'] !== null ? autolinker.link(String(feature.properties['Luas_Ha']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_BATASKECAMATAN_2_0() {
+            return {
+                pane: 'pane_BATASKECAMATAN_2',
+                opacity: 1,
+                color: 'rgba(247,247,247,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(150,150,150,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_BATASKECAMATAN_2');
+        map.getPane('pane_BATASKECAMATAN_2').style.zIndex = 402;
+        map.getPane('pane_BATASKECAMATAN_2').style['mix-blend-mode'] = 'normal';
+        var layer_BATASKECAMATAN_2 = new L.geoJson(json_BATASKECAMATAN_2, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_BATASKECAMATAN_2',
+            layerName: 'layer_BATASKECAMATAN_2',
+            pane: 'pane_BATASKECAMATAN_2',
+            onEachFeature: pop_BATASKECAMATAN_2,
+            style: style_BATASKECAMATAN_2_0,
+        });
+        bounds_group.addLayer(layer_BATASKECAMATAN_2);
+        map.addLayer(layer_BATASKECAMATAN_2);
+        function pop_ADM_HARAU_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (var i in e.target._eventParents) {
+                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
+                            e.target._eventParents[i].resetStyle(e.target);
+                        }
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Luas_Ha</th>\
+                        <td>' + (feature.properties['Luas_Ha'] !== null ? autolinker.link(String(feature.properties['Luas_Ha']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">nama_prop</th>\
+                        <td>' + (feature.properties['nama_prop'] !== null ? autolinker.link(String(feature.properties['nama_prop']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">nama_kab</th>\
+                        <td>' + (feature.properties['nama_kab'] !== null ? autolinker.link(String(feature.properties['nama_kab']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">nama_kec</th>\
+                        <td>' + (feature.properties['nama_kec'] !== null ? autolinker.link(String(feature.properties['nama_kec']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">nama_kel</th>\
+                        <td>' + (feature.properties['nama_kel'] !== null ? autolinker.link(String(feature.properties['nama_kel']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">jangkauan</th>\
+                        <td>' + (feature.properties['jangkauan'] !== null ? autolinker.link(String(feature.properties['jangkauan']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_ADM_HARAU_3_0() {
+            return {
+                pane: 'pane_ADM_HARAU_3',
+                opacity: 1,
+                color: 'rgba(228,26,28,1.0)',
+                dashArray: '16.0,8.0,4.0,8.0,4.0,8.0',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_ADM_HARAU_3');
+        map.getPane('pane_ADM_HARAU_3').style.zIndex = 403;
+        map.getPane('pane_ADM_HARAU_3').style['mix-blend-mode'] = 'normal';
+        var layer_ADM_HARAU_3 = new L.geoJson(json_ADM_HARAU_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_ADM_HARAU_3',
+            layerName: 'layer_ADM_HARAU_3',
+            pane: 'pane_ADM_HARAU_3',
+            onEachFeature: pop_ADM_HARAU_3,
+            style: style_ADM_HARAU_3_0,
+        });
+        bounds_group.addLayer(layer_ADM_HARAU_3);
+        map.addLayer(layer_ADM_HARAU_3);
+        function pop_ADM_KAPURIX_4(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (var i in e.target._eventParents) {
+                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
+                            e.target._eventParents[i].resetStyle(e.target);
+                        }
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Luas_Ha</th>\
+                        <td>' + (feature.properties['Luas_Ha'] !== null ? autolinker.link(String(feature.properties['Luas_Ha']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">nama_prop</th>\
+                        <td>' + (feature.properties['nama_prop'] !== null ? autolinker.link(String(feature.properties['nama_prop']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">nama_kab</th>\
+                        <td>' + (feature.properties['nama_kab'] !== null ? autolinker.link(String(feature.properties['nama_kab']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">nama_kec</th>\
+                        <td>' + (feature.properties['nama_kec'] !== null ? autolinker.link(String(feature.properties['nama_kec']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">nama_kel</th>\
+                        <td>' + (feature.properties['nama_kel'] !== null ? autolinker.link(String(feature.properties['nama_kel']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">jangkauan</th>\
+                        <td>' + (feature.properties['jangkauan'] !== null ? autolinker.link(String(feature.properties['jangkauan']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_ADM_KAPURIX_4_0() {
+            return {
+                pane: 'pane_ADM_KAPURIX_4',
+                opacity: 1,
+                color: 'rgba(228,26,28,1.0)',
+                dashArray: '16.0,8.0,4.0,8.0,4.0,8.0',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 4.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_ADM_KAPURIX_4');
+        map.getPane('pane_ADM_KAPURIX_4').style.zIndex = 404;
+        map.getPane('pane_ADM_KAPURIX_4').style['mix-blend-mode'] = 'normal';
+        var layer_ADM_KAPURIX_4 = new L.geoJson(json_ADM_KAPURIX_4, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_ADM_KAPURIX_4',
+            layerName: 'layer_ADM_KAPURIX_4',
+            pane: 'pane_ADM_KAPURIX_4',
+            onEachFeature: pop_ADM_KAPURIX_4,
+            style: style_ADM_KAPURIX_4_0,
+        });
+        bounds_group.addLayer(layer_ADM_KAPURIX_4);
+        map.addLayer(layer_ADM_KAPURIX_4);
+        function pop_KebunSawitRakyatBersertifikat_5(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    for (var i in e.target._eventParents) {
+                        if (typeof e.target._eventParents[i].resetStyle === 'function') {
+                            e.target._eventParents[i].resetStyle(e.target);
+                        }
+                    }
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">fid</th>\
+                        <td>' + (feature.properties['fid'] !== null ? autolinker.link(String(feature.properties['fid']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">KABUPATEN</th>\
+                        <td>' + (feature.properties['KABUPATEN'] !== null ? autolinker.link(String(feature.properties['KABUPATEN']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">KECAMATAN</th>\
+                        <td>' + (feature.properties['KECAMATAN'] !== null ? autolinker.link(String(feature.properties['KECAMATAN']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">NAGARI</th>\
+                        <td>' + (feature.properties['NAGARI'] !== null ? autolinker.link(String(feature.properties['NAGARI']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">LUAS</th>\
+                        <td>' + (feature.properties['LUAS'] !== null ? autolinker.link(String(feature.properties['LUAS']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">STATUS SERTIFIKASI</th>\
+                        <td>' + (feature.properties['STATUS SERTIFIKASI'] !== null ? autolinker.link(String(feature.properties['STATUS SERTIFIKASI']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PETANI</th>\
+                        <td>' + (feature.properties['PETANI'] !== null ? autolinker.link(String(feature.properties['PETANI']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">TAHUN/TAHAP PENDATAAN</th>\
+                        <td>' + (feature.properties['TAHUN/TAHAP PENDATAAN'] !== null ? autolinker.link(String(feature.properties['TAHUN/TAHAP PENDATAAN']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_KebunSawitRakyatBersertifikat_5_0() {
+            return {
+                pane: 'pane_KebunSawitRakyatBersertifikat_5',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 1.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(255,158,23,1.0)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_KebunSawitRakyatBersertifikat_5');
+        map.getPane('pane_KebunSawitRakyatBersertifikat_5').style.zIndex = 405;
+        map.getPane('pane_KebunSawitRakyatBersertifikat_5').style['mix-blend-mode'] = 'normal';
+        var layer_KebunSawitRakyatBersertifikat_5 = new L.geoJson(json_KebunSawitRakyatBersertifikat_5, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_KebunSawitRakyatBersertifikat_5',
+            layerName: 'layer_KebunSawitRakyatBersertifikat_5',
+            pane: 'pane_KebunSawitRakyatBersertifikat_5',
+            onEachFeature: pop_KebunSawitRakyatBersertifikat_5,
+            style: style_KebunSawitRakyatBersertifikat_5_0,
+        });
+        bounds_group.addLayer(layer_KebunSawitRakyatBersertifikat_5);
+        map.addLayer(layer_KebunSawitRakyatBersertifikat_5);
+        var overlaysTree = [
+            {label: '<img src="legend/KebunSawitRakyatBersertifikat_5.png" /> Kebun Sawit Rakyat Bersertifikat', layer: layer_KebunSawitRakyatBersertifikat_5},
+            {label: '<img src="legend/ADM_KAPURIX_4.png" /> ADM_KAPUR IX', layer: layer_ADM_KAPURIX_4},
+            {label: '<img src="legend/ADM_HARAU_3.png" /> ADM_HARAU', layer: layer_ADM_HARAU_3},
+            {label: '<img src="legend/BATASKECAMATAN_2.png" /> BATAS KECAMATAN', layer: layer_BATASKECAMATAN_2},
+            {label: "Esri Imagery", layer: layer_EsriImagery_1, radioGroup: 'bm' },
+            {label: "Esri Terrain", layer: layer_EsriTerrain_0, radioGroup: 'bm' },]
+        var lay = L.control.layers.tree(null, overlaysTree,{
+            //namedToggle: true,
+            //selectorBack: false,
+            //closedSymbol: '&#8862; &#x1f5c0;',
+            //openedSymbol: '&#8863; &#x1f5c1;',
+            //collapseAll: 'Collapse all',
+            //expandAll: 'Expand all',
+            collapsed: true,
+        });
+        lay.addTo(map);
+        setBounds();
+        var i = 0;
+        layer_KebunSawitRakyatBersertifikat_5.eachLayer(function(layer) {
+            var context = {
+                feature: layer.feature,
+                variables: {}
+            };
+            layer.bindTooltip((layer.feature.properties['PETANI'] !== null?String('<div style="color: #ffffff; font-size: 10pt; font-weight: bold; font-family: \'Open Sans\', sans-serif;">' + layer.feature.properties['PETANI']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_KebunSawitRakyatBersertifikat_5'});
+            labels.push(layer);
+            totalMarkers += 1;
+              layer.added = true;
+              addLabel(layer, i);
+              i++;
+        });
+        map.addControl(new L.Control.Search({
+            layer: layer_KebunSawitRakyatBersertifikat_5,
+            initial: false,
+            hideMarkerOnCollapse: true,
+            propertyName: 'PETANI'}));
+        if (typeof url === 'undefined') {
+            document.getElementsByClassName('search-button')[0].className += ' fa fa-binoculars';
+        } else {
+            document.getElementsByClassName('search-button')[1].className += ' fa fa-binoculars';
+        }
+        resetLabels([layer_ADM_HARAU_3,layer_ADM_KAPURIX_4,layer_KebunSawitRakyatBersertifikat_5]);
+        map.on("zoomend", function(){
+            resetLabels([layer_ADM_HARAU_3,layer_ADM_KAPURIX_4,layer_KebunSawitRakyatBersertifikat_5]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_ADM_HARAU_3,layer_ADM_KAPURIX_4,layer_KebunSawitRakyatBersertifikat_5]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_ADM_HARAU_3,layer_ADM_KAPURIX_4,layer_KebunSawitRakyatBersertifikat_5]);
+        });
+        </script>        
+    <script>
+
+/* ==========================================
+   DASHBOARD TOGGLE
+   ========================================== */
+
+function toggleDashboard() {
+
+    var dashboard =
+        document.getElementById("dashboard-panel");
+
+    var button =
+        document.getElementById("dashboard-toggle");
+
+
+    if (dashboard.classList.contains("dashboard-open")) {
+
+        dashboard.classList.remove("dashboard-open");
+
+        button.innerHTML = "▼";
+
+    } else {
+
+        dashboard.classList.add("dashboard-open");
+
+        button.innerHTML = "▲";
+
+    }
+
+}
+
+</script>
+<script>
+
+function updateDashboard() {
+
+    var total = 0;
+    var harau = 0;
+    var kapurix = 0;
+
+
+    layer_KebunSawitRakyatBersertifikat_5
+        .eachLayer(function(featureLayer) {
+
+            /*
+             * Hanya menghitung fitur
+             * yang sedang ditampilkan di peta
+             */
+
+            if (!map.hasLayer(featureLayer)) {
+                return;
+            }
+
+
+            if (!featureLayer.feature) {
+                return;
+            }
+
+
+            var kecamatan =
+                featureLayer.feature.properties[
+                    "KECAMATAN"
+                ];
+
+
+            if (
+                kecamatan !== null &&
+                kecamatan !== undefined
+            ) {
+
+                kecamatan =
+                    String(kecamatan)
+                    .trim()
+                    .toUpperCase();
+
+            } else {
+
+                kecamatan = "";
+
+            }
+
+
+            total++;
+
+
+            if (kecamatan === "HARAU") {
+
+                harau++;
+
+            }
+
+
+            if (
+                kecamatan === "KAPUR IX" ||
+                kecamatan === "KAPURIX"
+            ) {
+
+                kapurix++;
+
+            }
+
+        });
+
+
+    document.getElementById(
+        "total-data"
+    ).innerHTML = total;
+
+
+    document.getElementById(
+        "total-harau"
+    ).innerHTML = harau;
+
+
+    document.getElementById(
+        "total-kapurix"
+    ).innerHTML = kapurix;
+
+}
+
+</script>
+<script>
+
+/* =====================================================
+   DASHBOARD DATA KEBUN SAWIT RAKYAT
+   ===================================================== */
+
+function updateDashboard() {
+
+    var total = 0;
+    var harau = 0;
+    var kapurix = 0;
+
+    var layer = layer_KebunSawitRakyatBersertifikat_5;
+
+
+    /* -----------------------------------------------
+       HITUNG DATA
+       ----------------------------------------------- */
+
+    layer.eachLayer(function(featureLayer) {
+
+        if (!featureLayer.feature) {
+            return;
+        }
+
+        var data = featureLayer.feature.properties;
+
+        var kecamatan = data["KECAMATAN"];
+
+        /*
+         * Bersihkan tulisan agar:
+         * HARAU
+         * Harau
+         * harau
+         * tetap terbaca sama
+         */
+
+        if (kecamatan) {
+
+            kecamatan =
+                String(kecamatan)
+                .trim()
+                .toUpperCase();
+
+        }
+
+
+        /* TOTAL DATA */
+
+        total++;
+
+
+        /* HARAU */
+
+        if (kecamatan === "HARAU") {
+            harau++;
+        }
+
+
+        /* KAPUR IX */
+
+        if (
+            kecamatan === "KAPUR IX" ||
+            kecamatan === "KAPURIX"
+        ) {
+            kapurix++;
+        }
+
+    });
+
+
+    /* -----------------------------------------------
+       MASUKKAN HASIL KE DASHBOARD
+       ----------------------------------------------- */
+
+    document.getElementById("total-data").innerHTML =
+        total;
+
+    document.getElementById("total-harau").innerHTML =
+        harau;
+
+    document.getElementById("total-kapurix").innerHTML =
+        kapurix;
+
+}
+
+
+/* Jalankan setelah layer selesai dibuat */
+
+setTimeout(function() {
+
+    updateDashboard();
+
+}, 1000);
+
+</script>
+<script>
+
+/* =====================================================
+   DASHBOARD MENGIKUTI FILTER KECAMATAN
+   ===================================================== */
+
+function updateDashboardFilter() {
+
+    var total = 0;
+
+    var layer =
+        layer_KebunSawitRakyatBersertifikat_5;
+
+
+    /*
+     * Cari semua select/filter yang ada di halaman
+     */
+
+    var selects =
+        document.querySelectorAll("select");
+
+
+    var kecamatanFilter = null;
+
+
+    /*
+     * Cari filter yang memiliki pilihan HARAU
+     * atau KAPUR IX
+     */
+
+    selects.forEach(function(select) {
+
+        var text =
+            select.innerText.toUpperCase();
+
+        if (
+            text.includes("HARAU") ||
+            text.includes("KAPUR IX")
+        ) {
+
+            kecamatanFilter = select;
+
+        }
+
+    });
+
+
+    /*
+     * Nilai filter
+     */
+
+    var filterValue = "";
+
+    if (kecamatanFilter) {
+
+        filterValue =
+            kecamatanFilter.value
+            .trim()
+            .toUpperCase();
+
+    }
+
+
+    /*
+     * Hitung data
+     */
+
+    layer.eachLayer(function(featureLayer) {
+
+        if (!featureLayer.feature) {
+            return;
+        }
+
+        var data =
+            featureLayer.feature.properties;
+
+        var kecamatan =
+            data["KECAMATAN"];
+
+
+        if (kecamatan) {
+
+            kecamatan =
+                String(kecamatan)
+                .trim()
+                .toUpperCase();
+
+        }
+
+
+        /*
+         * Jika tidak ada filter
+         */
+
+        if (
+            filterValue === "" ||
+            filterValue === "ALL" ||
+            filterValue === "SEMUA"
+        ) {
+
+            total++;
+
+        }
+
+
+        /*
+         * Jika filter dipilih
+         */
+
+        else if (
+            kecamatan === filterValue
+        ) {
+
+            total++;
+
+        }
+
+    });
+
+
+    /*
+     * Tampilkan angka
+     */
+
+    document.getElementById("total-data").innerHTML =
+        total;
+
+}
+
+
+/* Jalankan saat halaman selesai */
+
+setTimeout(function() {
+
+    updateDashboardFilter();
+
+}, 1500);
+
+</script>
+<script>
+
+/* =========================================
+   FILTER KECAMATAN
+   ========================================= */
+
+var filterKecamatan =
+    document.getElementById("filter-kecamatan");
+
+var clearKecamatan =
+    document.getElementById("clear-kecamatan");
+
+
+function filterKecamatanMap() {
+
+    var pilihan =
+        filterKecamatan.value.toUpperCase();
+
+
+    layer_KebunSawitRakyatBersertifikat_5
+        .eachLayer(function(featureLayer) {
+
+            if (!featureLayer.feature) {
+                return;
+            }
+
+
+            var kecamatan =
+                featureLayer.feature.properties[
+                    "KECAMATAN"
+                ];
+
+
+            if (
+                kecamatan !== null &&
+                kecamatan !== undefined
+            ) {
+
+                kecamatan =
+                    String(kecamatan)
+                    .trim()
+                    .toUpperCase();
+
+            } else {
+
+                kecamatan = "";
+
+            }
+
+
+            /*
+             * SEMUA KECAMATAN
+             */
+
+            if (pilihan === "ALL") {
+
+                if (!map.hasLayer(featureLayer)) {
+
+                    map.addLayer(featureLayer);
+
+                }
+
+            }
+
+
+            /*
+             * KECAMATAN TERTENTU
+             */
+
+            else {
+
+                if (kecamatan === pilihan) {
+
+                    if (!map.hasLayer(featureLayer)) {
+
+                        map.addLayer(featureLayer);
+
+                    }
+
+                } else {
+
+                    if (map.hasLayer(featureLayer)) {
+
+                        map.removeLayer(featureLayer);
+
+                    }
+
+                }
+
+            }
+
+        });
+
+
+    /*
+     * Update dashboard
+     */
+
+    updateDashboard();
+
+}
+
+
+/* Ketika Kecamatan dipilih */
+
+filterKecamatan.addEventListener(
+    "change",
+    function() {
+
+        filterKecamatanMap();
+
+    }
+);
+
+
+/* Tombol Bersihkan */
+
+clearKecamatan.addEventListener(
+    "click",
+    function() {
+
+        filterKecamatan.value = "ALL";
+
+        filterKecamatanMap();
+
+    }
+);
+
+</script>
+<script>
+
+/* =========================================
+   FILTER NAGARI
+   ========================================= */
+
+var selectNagari =
+    document.getElementById("filter-nagari");
+
+var clearNagari =
+    document.getElementById("clear-nagari");
+
+
+/*
+ * Mengambil daftar Nagari dari
+ * layer kebun
+ */
+
+function isiDaftarNagari() {
+
+    var daftar = [];
+
+    layer_KebunSawitRakyatBersertifikat_5
+        .eachLayer(function(featureLayer) {
+
+            if (!featureLayer.feature) {
+                return;
+            }
+
+            var nagari =
+                featureLayer.feature.properties["NAGARI"];
+
+            if (
+                nagari !== null &&
+                nagari !== undefined &&
+                String(nagari).trim() !== ""
+            ) {
+
+                nagari =
+                    String(nagari).trim();
+
+                if (
+                    daftar.indexOf(nagari) === -1
+                ) {
+
+                    daftar.push(nagari);
+
+                }
+
+            }
+
+        });
+
+
+    daftar.sort();
+
+
+    /*
+     * Kosongkan pilihan lama
+     */
+
+    selectNagari.innerHTML =
+        '<option value="ALL">Semua Nagari</option>';
+
+
+    /*
+     * Masukkan Nagari
+     */
+
+    daftar.forEach(function(nagari) {
+
+        var option =
+            document.createElement("option");
+
+        option.value = nagari;
+
+        option.textContent = nagari;
+
+        selectNagari.appendChild(option);
+
+    });
+
+}
+
+
+/*
+ * Jalankan setelah layer selesai dibuat
+ */
+
+setTimeout(function() {
+
+    isiDaftarNagari();
+
+}, 1000);
+
+
+/*
+ * Ketika Nagari dipilih
+ */
+
+selectNagari.addEventListener(
+    "change",
+    function() {
+
+        filterNagari();
+
+    }
+);
+
+
+/*
+ * Fungsi filter
+ */
+
+function filterNagari() {
+
+    var pilihan =
+        selectNagari.value;
+
+
+    layer_KebunSawitRakyatBersertifikat_5
+        .eachLayer(function(featureLayer) {
+
+            if (!featureLayer.feature) {
+                return;
+            }
+
+
+            var nagari =
+                featureLayer.feature.properties["NAGARI"];
+
+
+            if (
+                nagari !== null &&
+                nagari !== undefined
+            ) {
+
+                nagari =
+                    String(nagari).trim();
+
+            } else {
+
+                nagari = "";
+
+            }
+
+
+            /*
+             * Tampilkan semua
+             */
+
+            if (pilihan === "ALL") {
+
+                if (
+                    !map.hasLayer(featureLayer)
+                ) {
+
+                    map.addLayer(featureLayer);
+
+                }
+
+            }
+
+
+            /*
+             * Tampilkan Nagari yang dipilih
+             */
+
+            else if (
+                nagari === pilihan
+            ) {
+
+                if (
+                    !map.hasLayer(featureLayer)
+                ) {
+
+                    map.addLayer(featureLayer);
+
+                }
+
+            }
+
+
+            /*
+             * Sembunyikan Nagari lainnya
+             */
+
+            else {
+
+                if (
+                    map.hasLayer(featureLayer)
+                ) {
+
+                    map.removeLayer(featureLayer);
+
+                }
+
+            }
+
+        });
+
+
+    /*
+     * Perbarui dashboard
+     */
+
+    if (
+        typeof updateDashboard === "function"
+    ) {
+
+        updateDashboard();
+
+    }
+
+}
+
+
+/*
+ * Tombol bersihkan
+ */
+
+clearNagari.addEventListener(
+    "click",
+    function() {
+
+        selectNagari.value = "ALL";
+
+        filterNagari();
+
+    }
+);
+
+</script>
+<script>
+
+var filterToggle =
+    document.getElementById("filter-toggle");
+
+var filterPanel =
+    document.getElementById("filter-panel");
+
+var filterClose =
+    document.getElementById("filter-close");
+
+
+/* Buka filter */
+
+filterToggle.onclick = function() {
+
+    if (
+        filterPanel.style.display === "block"
+    ) {
+
+        filterPanel.style.display = "none";
+
+    } else {
+
+        filterPanel.style.display = "block";
+
+    }
+
+};
+
+
+/* Tutup filter */
+
+filterClose.onclick = function() {
+
+    filterPanel.style.display = "none";
+
+};
+
+</script>
+</body>
+</html>
